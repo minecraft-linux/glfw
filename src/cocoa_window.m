@@ -864,6 +864,10 @@ static GLFWbool createNativeWindow(_GLFWwindow* window,
     _glfwPlatformGetWindowSize(window, &window->ns.width, &window->ns.height);
     _glfwPlatformGetFramebufferSize(window, &window->ns.fbWidth, &window->ns.fbHeight);
 
+    // layer required for EGL window surface creation
+    [window->ns.view setWantsLayer:YES];
+    window->ns.layer = [window->ns.view layer];
+
     return GLFW_TRUE;
 }
 
