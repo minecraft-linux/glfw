@@ -914,6 +914,7 @@ int _glfwPlatformCreateWindow(_GLFWwindow* window,
             // layer required for EGL window surface creation
             [window->ns.view setWantsLayer:YES];
             window->ns.layer = [window->ns.view layer];
+            [window->ns.layer setContentsScale:[window->ns.object backingScaleFactor]];
             if (!_glfwInitEGL())
                 return GLFW_FALSE;
             if (!_glfwCreateContextEGL(window, ctxconfig, fbconfig))
