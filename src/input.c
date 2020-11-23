@@ -606,7 +606,7 @@ GLFWAPI void glfwSetInputMode(GLFWwindow* handle, int mode, int value)
     }
     else if (mode == GLFW_TOUCH)
     {
-        setTouchInput(window, value ? GL_TRUE : GL_FALSE);
+        setTouchInput(window, value ? GLFW_TRUE : GLFW_FALSE);
     }
     else
         _glfwInputError(GLFW_INVALID_ENUM, "Invalid input mode 0x%08X", mode);
