@@ -292,18 +292,18 @@ extern "C" {
  */
 #define GLFW_FALSE                  0
 
-/*! @name Key and button actions
+/*! @name Key, button and touch actions
  *  @{ */
-/*! @brief The key or mouse button was released.
+/*! @brief The key or button was released or the touch ended.
  *
- *  The key or mouse button was released.
+ *  The key or button was released or the touch ended.
  *
  *  @ingroup input
  */
 #define GLFW_RELEASE                0
-/*! @brief The key or mouse button was pressed.
+/*! @brief The key or button was pressed or the touch started.
  *
- *  The key or mouse button was pressed.
+ *  The key or button was pressed or the touch started.
  *
  *  @ingroup input
  */
@@ -315,6 +315,10 @@ extern "C" {
  *  @ingroup input
  */
 #define GLFW_REPEAT                 2
+/*! @brief The touch was moved.
+ *  @ingroup input
+ */
+#define GLFW_MOVE                   3
 /*! @} */
 
 /*! @defgroup hat_state Joystick hat states
@@ -1022,6 +1026,7 @@ extern "C" {
 #define GLFW_STICKY_MOUSE_BUTTONS   0x00033003
 #define GLFW_LOCK_KEY_MODS          0x00033004
 #define GLFW_RAW_MOUSE_MOTION       0x00033005
+#define GLFW_TOUCH                  0x00030006
 
 #define GLFW_CURSOR_NORMAL          0x00034001
 #define GLFW_CURSOR_HIDDEN          0x00034002
@@ -1570,6 +1575,18 @@ typedef void (* GLFWcharmodsfun)(GLFWwindow*,unsigned int,int);
  *  @ingroup input
  */
 typedef void (* GLFWdropfun)(GLFWwindow*,int,const char*[]);
+
+/*! @brief The function signature for touch callbacks.
+ *  @param[in] window The window that received the event.
+ *  @param[in] touch The touch that triggered the event.
+ *  @param[in] action One of @ref GLFW_PRESS, @c GLFW_MOVE or @ref GLFW_RELEASE.
+ *  @param[in] xpos The new x-coordinate of the touch.
+ *  @param[in] ypos The new y-coordinate of the touch.
+ *  @ingroup input
+ *
+ *  @sa glfwSetTouchCallback
+ */
+typedef void (* GLFWtouchfun)(GLFWwindow*,int,int,double,double);
 
 /*! @brief The function pointer type for monitor configuration callbacks.
  *
@@ -4796,6 +4813,21 @@ GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* window, GLFWscrollfun ca
  *  @ingroup input
  */
 GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow* window, GLFWdropfun callback);
+
+/*! @brief Sets the touch callback.
+ *
+ *  This function sets the touch callback, which is called when a touch is
+ *  started, ended or moved.
+ *
+ *  @param[in] window The window whose callback to set.
+ *  @param[in] cbfun The new scroll callback, or `NULL` to remove the currently
+ *  set callback.
+ *  @return The previously set callback, or `NULL` if no callback was set or an
+ *  error occurred.
+ *
+ *  @ingroup input
+ */
+GLFWAPI GLFWtouchfun glfwSetTouchCallback(GLFWwindow* window, GLFWtouchfun cbfun);
 
 /*! @brief Returns whether the specified joystick is present.
  *

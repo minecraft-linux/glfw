@@ -36,7 +36,7 @@
 #include <string.h>
 
 // Internal key state used for sticky keys
-#define _GLFW_STICK 3
+#define _GLFW_STICK 4
 
 // Internal constants for gamepad mapping source types
 #define _GLFW_JOYSTICK_AXIS     1
@@ -249,6 +249,18 @@ static GLFWbool parseMapping(_GLFWmapping* mapping, const char* string)
 
     _glfwPlatformUpdateGamepadGUID(mapping->guid);
     return GLFW_TRUE;
+}
+
+// Set touch input for the specified window
+//
+static void setTouchInput(_GLFWwindow* window, int enabled)
+{
+    if (window->touchInput == enabled)
+        return;
+
+    _glfwPlatformSetTouchInput(window, enabled);
+
+    window->touchInput = enabled;
 }
 
 
@@ -465,6 +477,12 @@ void _glfwCenterCursorInContentArea(_GLFWwindow* window)
     _glfwPlatformSetCursorPos(window, width / 2.0, height / 2.0);
 }
 
+void _glfwInputTouch(_GLFWwindow* window, int touch, int action, double xpos, double ypos)
+{
+    if (window->callbacks.touch)
+        window->callbacks.touch((GLFWwindow*) window, touch, action, xpos, ypos);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //////                        GLFW public API                       //////
@@ -489,6 +507,8 @@ GLFWAPI int glfwGetInputMode(GLFWwindow* handle, int mode)
             return window->lockKeyMods;
         case GLFW_RAW_MOUSE_MOTION:
             return window->rawMouseMotion;
+        case GLFW_TOUCH:
+            return window->touchInput;
     }
 
     _glfwInputError(GLFW_INVALID_ENUM, "Invalid input mode 0x%08X", mode);
@@ -583,6 +603,10 @@ GLFWAPI void glfwSetInputMode(GLFWwindow* handle, int mode, int value)
 
         window->rawMouseMotion = value;
         _glfwPlatformSetRawMouseMotion(window, value);
+    }
+    else if (mode == GLFW_TOUCH)
+    {
+        setTouchInput(window, value ? GL_TRUE : GL_FALSE);
     }
     else
         _glfwInputError(GLFW_INVALID_ENUM, "Invalid input mode 0x%08X", mode);
@@ -1306,6 +1330,14 @@ GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate* state)
     }
 
     return GLFW_TRUE;
+}
+
+GLFWAPI GLFWtouchfun glfwSetTouchCallback(GLFWwindow* handle, GLFWtouchfun cbfun)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
+    _GLFW_SWAP_POINTERS(window->callbacks.touch, cbfun);
+    return cbfun;
 }
 
 GLFWAPI void glfwSetClipboardString(GLFWwindow* handle, const char* string)

@@ -243,6 +243,7 @@ typedef struct _GLFWlibraryWayland
 
     int                         compositorVersion;
     int                         seatVersion;
+    struct wl_touch*            touch;
 
     struct wl_cursor_theme*     cursorTheme;
     struct wl_cursor_theme*     cursorThemeHiDPI;
@@ -305,7 +306,10 @@ typedef struct _GLFWlibraryWayland
 
     _GLFWwindow*                pointerFocus;
     _GLFWwindow*                keyboardFocus;
-
+    int*                        touchIDs;
+    _GLFWwindow**               touchFocuses;
+    int                         touchSize;
+    int                         touchEnabled;
     struct {
         void*                   handle;
 

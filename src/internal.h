@@ -385,6 +385,7 @@ struct _GLFWwindow
     GLFWbool            stickyKeys;
     GLFWbool            stickyMouseButtons;
     GLFWbool            lockKeyMods;
+    GLFWbool            touchInput;
     int                 cursorMode;
     char                mouseButtons[GLFW_MOUSE_BUTTON_LAST + 1];
     char                keys[GLFW_KEY_LAST + 1];
@@ -412,6 +413,7 @@ struct _GLFWwindow
         GLFWcharfun             character;
         GLFWcharmodsfun         charmods;
         GLFWdropfun             drop;
+        GLFWtouchfun            touch;
     } callbacks;
 
     // This is defined in the window API's platform.h
@@ -594,6 +596,17 @@ int _glfwPlatformInit(void);
 void _glfwPlatformTerminate(void);
 const char* _glfwPlatformGetVersionString(void);
 
+/*! @brief Sets whether touch input is enabled for the specified window.
+ *  @param[in] window The window whose touch input status to change.
+ *  @param[in] enabled @c GL_TRUE to enable touch input, or @c GL_FALSE to
+ *  disable it.
+ *  @ingroup platform
+ */
+void _glfwPlatformSetTouchInput(_GLFWwindow* window, int enabled);
+
+/*! @copydoc glfwGetCursorPos
+ *  @ingroup platform
+ */
 void _glfwPlatformGetCursorPos(_GLFWwindow* window, double* xpos, double* ypos);
 void _glfwPlatformSetCursorPos(_GLFWwindow* window, double xpos, double ypos);
 void _glfwPlatformSetCursorMode(_GLFWwindow* window, int mode);
@@ -720,6 +733,7 @@ void _glfwInputScroll(_GLFWwindow* window, double xoffset, double yoffset);
 void _glfwInputMouseClick(_GLFWwindow* window, int button, int action, int mods);
 void _glfwInputCursorPos(_GLFWwindow* window, double xpos, double ypos);
 void _glfwInputCursorEnter(_GLFWwindow* window, GLFWbool entered);
+void _glfwInputTouch(_GLFWwindow* window, int touch, int action, double xpos, double ypos);
 void _glfwInputDrop(_GLFWwindow* window, int count, const char** names);
 void _glfwInputJoystick(_GLFWjoystick* js, int event);
 void _glfwInputJoystickAxis(_GLFWjoystick* js, int axis, float value);

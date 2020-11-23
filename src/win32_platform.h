@@ -366,7 +366,16 @@ typedef struct _GLFWlibraryWin32
         PFN_SetProcessDpiAwarenessContext SetProcessDpiAwarenessContext_;
         PFN_GetDpiForWindow             GetDpiForWindow_;
         PFN_AdjustWindowRectExForDpi    AdjustWindowRectExForDpi_;
+        GETTOUCHINPUTINFO_T     GetTouchInputInfo;
+        CLOSETOUCHINPUTHANDLE_T CloseTouchInputHandle;
+        REGISTERTOUCHWINDOW_T   RegisterTouchWindow;
+        UNREGISTERTOUCHWINDOW_T UnregisterTouchWindow;
     } user32;
+
+
+    struct {
+        GLboolean       available;
+    } touch;
 
     struct {
         HINSTANCE                       instance;

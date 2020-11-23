@@ -1471,6 +1471,10 @@ void _glfwPlatformGetCursorPos(_GLFWwindow* window, double* xpos, double* ypos)
     } // autoreleasepool
 }
 
+void _glfwPlatformSetTouchInput(_GLFWwindow* window, int enabled)
+{
+}
+
 void _glfwPlatformSetCursorPos(_GLFWwindow* window, double x, double y)
 {
     @autoreleasepool {

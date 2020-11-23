@@ -99,6 +99,22 @@ static GLFWbool loadLibraries(void)
         GetProcAddress(_glfw.win32.user32.instance, "GetDpiForWindow");
     _glfw.win32.user32.AdjustWindowRectExForDpi_ = (PFN_AdjustWindowRectExForDpi)
         GetProcAddress(_glfw.win32.user32.instance, "AdjustWindowRectExForDpi");
+    _glfw.win32.user32.GetTouchInputInfo = (GETTOUCHINPUTINFO_T)
+        GetProcAddress(_glfw.win32.user32.instance, "GetTouchInputInfo");
+    _glfw.win32.user32.CloseTouchInputHandle = (CLOSETOUCHINPUTHANDLE_T)
+        GetProcAddress(_glfw.win32.user32.instance, "CloseTouchInputHandle");
+    _glfw.win32.user32.RegisterTouchWindow = (REGISTERTOUCHWINDOW_T)
+        GetProcAddress(_glfw.win32.user32.instance, "RegisterTouchWindow");
+    _glfw.win32.user32.UnregisterTouchWindow = (UNREGISTERTOUCHWINDOW_T)
+        GetProcAddress(_glfw.win32.user32.instance, "UnregisterTouchWindow");
+
+    if (_glfw.win32.user32.GetTouchInputInfo &&
+        _glfw.win32.user32.CloseTouchInputHandle &&
+        _glfw.win32.user32.RegisterTouchWindow &&
+        _glfw.win32.user32.UnregisterTouchWindow)
+    {
+        _glfw.win32.touch.available = GL_TRUE;
+    }
 
     _glfw.win32.dinput8.instance = LoadLibraryA("dinput8.dll");
     if (_glfw.win32.dinput8.instance)
