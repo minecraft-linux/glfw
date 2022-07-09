@@ -914,10 +914,31 @@ GLFWbool _glfwCreateWindowCocoa(_GLFWwindow* window,
         }
         else if (ctxconfig->source == GLFW_EGL_CONTEXT_API)
         {
-            // EGL implementation on macOS use CALayer* EGLNativeWindowType so we
-            // need to get the layer for EGL window surface creation.
+                        // layer required for EGL window surface creation
+            // HACK: Dynamically load Core Animation to avoid adding an extra
+            //       dependency for the majority who don't use MoltenVK
+            NSBundle* bundle = [NSBundle bundleWithPath:@"/System/Library/Frameworks/QuartzCore.framework"];
+            if (!bundle)
+            {
+                _glfwInputError(GLFW_PLATFORM_ERROR,
+                                "Cocoa: Failed to find QuartzCore.framework");
+                return VK_ERROR_EXTENSION_NOT_PRESENT;
+            }
+
+            // NOTE: Create the layer here as makeBackingLayer should not return nil
+            window->ns.layer = [[bundle classNamed:@"CAMetalLayer"] layer];
+            if (!window->ns.layer)
+            {
+                _glfwInputError(GLFW_PLATFORM_ERROR,
+                                "Cocoa: Failed to create layer for view");
+                return VK_ERROR_EXTENSION_NOT_PRESENT;
+            }
+
+            if (window->ns.retina)
+                [window->ns.layer setContentsScale:[window->ns.object backingScaleFactor]];
+
+            [window->ns.view setLayer:window->ns.layer];
             [window->ns.view setWantsLayer:YES];
-            window->ns.layer = [window->ns.view layer];
 
             if (!_glfwInitEGL())
                 return GLFW_FALSE;
