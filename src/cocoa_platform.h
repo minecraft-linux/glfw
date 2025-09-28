@@ -105,18 +105,8 @@ typedef VkResult (APIENTRY *PFN_vkCreateMetalSurfaceEXT)(VkInstance,const VkMeta
 #define GLFW_COCOA_MONITOR_STATE        _GLFWmonitorNS ns;
 #define GLFW_COCOA_CURSOR_STATE         _GLFWcursorNS  ns;
 
-#define _glfw_dlopen(name) dlopen(name, RTLD_LAZY | RTLD_LOCAL)
-#define _glfw_dlclose(handle) dlclose(handle)
-#define _glfw_dlsym(handle, name) dlsym(handle, name)
-
-#define _GLFW_EGL_NATIVE_WINDOW  ((EGLNativeWindowType) window->ns.layer)
-#define _GLFW_EGL_NATIVE_DISPLAY EGL_DEFAULT_DISPLAY
-
-#define _GLFW_PLATFORM_WINDOW_STATE         _GLFWwindowNS  ns
-#define _GLFW_PLATFORM_LIBRARY_WINDOW_STATE _GLFWlibraryNS ns
-#define _GLFW_PLATFORM_LIBRARY_TIMER_STATE  _GLFWtimerNS   ns
-#define _GLFW_PLATFORM_MONITOR_STATE        _GLFWmonitorNS ns
-#define _GLFW_PLATFORM_CURSOR_STATE         _GLFWcursorNS  ns
+#define GLFW_NSGL_CONTEXT_STATE         _GLFWcontextNSGL nsgl;
+#define GLFW_NSGL_LIBRARY_CONTEXT_STATE _GLFWlibraryNSGL nsgl;
 
 // HIToolbox.framework pointer typedefs
 #define kTISPropertyUnicodeKeyLayoutData _glfw.ns.tis.kPropertyUnicodeKeyLayoutData
