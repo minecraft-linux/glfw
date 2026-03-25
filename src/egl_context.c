@@ -358,6 +358,13 @@ static void destroyContextEGL(_GLFWwindow* window)
 //////                       GLFW internal API                      //////
 //////////////////////////////////////////////////////////////////////////
 
+#ifdef _GLFW_COCOA
+const char * elg_lib = "libEGL.dylib";
+const char * gles_lib = "libGLESv2.dylib";
+#define _GLFW_EGL_LIBRARY elg_lib
+#define _GLFW_GLESV2_LIBRARY gles_lib
+#endif
+
 // Initialize EGL
 //
 GLFWbool _glfwInitEGL(void)
